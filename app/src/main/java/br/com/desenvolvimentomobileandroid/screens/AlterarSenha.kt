@@ -2,6 +2,7 @@ package br.com.desenvolvimentomobileandroid.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -23,21 +24,23 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun Login(
-    onNavigateBack: () -> Unit,
-    onVerificaUsuario: (String, String) -> Unit
-) {
+fun AlterarSenha(
+    innerPadding: PaddingValues,
+    onAlterarSenha: (String, String, String) -> Unit,
+    onNavigateBack: () -> Unit
+){
     var email by remember { mutableStateOf("") }
-    var senha by remember { mutableStateOf("") }
+    var senhaAtual by remember { mutableStateOf("") }
+    var novaSenha by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
+            .padding(innerPadding)
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
-    ) {
-        Text(text = "Entrar")
+    ){
+        Text(text = "Alterar Senha")
 
         OutlinedTextField(
             value = email,
@@ -56,11 +59,25 @@ fun Login(
         )
 
         OutlinedTextField(
-            value = senha,
+            value = senhaAtual,
             onValueChange = {
-                senha = it
+                senhaAtual = it
             },
-            label = { Text(text = "Digite sua senha") },
+            label = { Text(text = "Digite sua senha Atual") },
+            visualTransformation = PasswordVisualTransformation(),
+            singleLine = true,
+            modifier = Modifier
+                .padding(bottom = 16.dp)
+                .fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+        )
+
+        OutlinedTextField(
+            value = novaSenha,
+            onValueChange = {
+                novaSenha = it
+            },
+            label = { Text(text = "Digite sua nova Senha") },
             visualTransformation = PasswordVisualTransformation(),
             singleLine = true,
             modifier = Modifier
@@ -71,15 +88,15 @@ fun Login(
 
         OutlinedButton(
             onClick = {
-                onVerificaUsuario(email, senha)
+                onAlterarSenha(email, senhaAtual, novaSenha)
             },
             modifier = Modifier
                 .padding(top = 16.dp)
                 .fillMaxWidth(),
-            enabled = email.isNotBlank() && senha.isNotBlank(),
+            enabled = email.isNotBlank() && senhaAtual.isNotBlank() && novaSenha.isNotBlank(),
             shape = MaterialTheme.shapes.small,
         ) {
-            Text(text = "Entrar")
+            Text(text = "Alterar senha")
         }
 
         ElevatedButton(
